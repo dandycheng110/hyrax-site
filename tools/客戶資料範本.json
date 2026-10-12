@@ -1,0 +1,17 @@
+{
+  "_說明": "複製這個檔案，改名成客戶的訂單編號（例如 20261015-01.json），填好後執行：python3 -I tools/make_card.py tools/orders/20261015-01.json。沒有的欄位整行刪掉就好。tools/orders/ 不會上傳。",
+  "surname": "姓",
+  "given": "名",
+  "display_name": "名片上顯示的名字",
+  "en_name": "英文名（可刪）",
+  "title": "職稱",
+  "org": "公司或店名",
+  "avatar_text": "頭像要放的字（通常是姓），客戶有照片的話之後再換",
+  "phone": "0912-345-678",
+  "email": "name@example.com",
+  "line_url": "LINE 加好友連結（LINE → 主頁 → 加入好友 → 行動條碼 → 分享）",
+  "instagram": "https://www.instagram.com/帳號/",
+  "website": "https://客戶的網站/",
+  "terminal": [["whoami", "名字"], ["cat skills", "專長一 × 專長二"], ["./status", "● 歡迎聯絡"]],
+  "badge": true
+}

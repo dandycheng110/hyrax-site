@@ -1,0 +1,30 @@
+# 搬到 Netlify 那天才會生效；放在 GitHub Pages 時這個檔案沒有作用。
+[build]
+  publish = "."
+
+# 客戶名片頁：不讓搜尋引擎收錄
+[[headers]]
+  for = "/c/*"
+  [headers.values]
+    X-Robots-Tag = "noindex"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 聯絡人檔：讓 iPhone／Android 直接跳出「加入聯絡人」
+[[headers]]
+  for = "/c/*/contact.vcf"
+  [headers.values]
+    Content-Type = "text/vcard; charset=utf-8"
+    Cache-Control = "no-cache"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+
+# 工具和客戶原始資料不對外公開
+[[redirects]]
+  from = "/tools/*"
+  to = "/404.html"
+  status = 404
+  force = true

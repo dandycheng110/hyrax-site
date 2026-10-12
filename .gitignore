@@ -1,0 +1,4 @@
+# 客戶原始資料與代碼清單只留在本機，絕不上傳
+tools/orders/
+tools/codes.txt
+.DS_Store
