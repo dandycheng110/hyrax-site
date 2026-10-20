@@ -148,6 +148,13 @@ h3{font-size:20px;line-height:1.5;font-weight:700}
 .section.alt{background:var(--bg-alt)}
 .head{max-width:760px;margin-bottom:32px}
 .head p{color:var(--dim);margin-top:10px}
+.mascot{display:flex;align-items:center;gap:18px;max-width:760px;padding:14px 22px 14px 14px;background:var(--panel);border:1px solid var(--line);border-radius:var(--radius)}
+.mascot img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex:none}
+.mascot figcaption{font-size:14px;line-height:1.7;color:var(--dim)}
+.mascot b{display:block;font-size:16px;color:var(--text);margin-bottom:2px}
+.mascot small{display:block;font-size:12px;margin-top:6px}
+.mascot small a{color:inherit}
+@media (max-width:600px){.mascot{align-items:flex-start;gap:14px;padding:12px 16px 12px 12px}.mascot img{width:64px;height:64px}}
 .panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
 .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
 .grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
@@ -560,6 +567,14 @@ footer a:hover{color:var(--teal)}
       <p>我是成育典，在新竹研究資安的研究生。「台灣蹄兔科技」是我的品牌，目前用個人身分接案，還沒登記商號，所以開的是個人收據。版型、名片網頁的程式，到每一張卡的寫入、上鎖、測試，都是我自己做。視覺先用 ChatGPT 生成，再由我挑選、修圖、排版，不是手繪。</p>
       <p>只有我一個人做，每個月能接的單有限，額滿會寫在封面上。目前還沒有可以公開的客戶作品：前 <span class="todo">5</span> 家團隊打 9 折、前 <span class="todo">10</span> 位單張款 NT$990，只要同意讓我把名片放進作品集（個人資料會遮掉）。</p>
     </div>
+    <figure class="mascot">
+      <img src="assets/hyrax-badge.jpg" width="168" height="168" alt="蹄兔的臉部特寫" loading="lazy">
+      <figcaption>
+        <b>品牌吉祥物：蹄兔（Hyrax）</b>
+        住在非洲和中東的小型草食動物，長得像大一號的天竺鼠，演化上卻跟大象、海牛是近親。
+        <small>照片：<a href="https://commons.wikimedia.org/wiki/File:Amneville_27_08_2010_Daman_1.jpg" target="_blank" rel="noopener">Vassil／Wikimedia Commons</a>（CC0）</small>
+      </figcaption>
+    </figure>
   </div>
 </section>
 
