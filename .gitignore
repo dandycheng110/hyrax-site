@@ -1,0 +1,16 @@
+# 客戶原始資料、名字登記簿、產出的名片頁都只留在本機，絕不上傳
+tools/orders/
+tools/names.txt
+dist/
+# Vercel 專案連結與 AWS 備案的識別碼都不進 git
+.vercel/
+infra/outputs.env
+.DS_Store
+.vercel
+# 工作檔整組留本機：產生器、發布腳本、基礎設施、子網域站台
+tools/
+scripts/
+infra/
+sites/
+vercel.json
+README.md
