@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NFC 名片｜換電話不用重印｜台灣蹄兔科技</title>
+<meta name="description" content="一張 NFC 卡加一頁你的名片網頁。碰一下打開名片，按一下存進通訊錄；資料有變動，改網頁就好。單張 NT$1,290 起，公司團隊 5 人起，新竹可以面交。">
+<meta name="theme-color" content="#F5F1E8">
+<link rel="canonical" href="https://hyrax.tw/cards/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="NFC 名片｜換電話、換職稱，名片不用重印">
+<meta property="og:description" content="碰一下打開名片，按一下存進通訊錄。單張 NT$1,290 起，公司團隊 5 人起。">
+<meta property="og:url" content="https://hyrax.tw/cards/">
+<meta property="og:image" content="https://hyrax.tw/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="zh_TW">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2304070F'/%3E%3Ccircle cx='32' cy='32' r='13' fill='%2336E2C8'/%3E%3C/svg%3E">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="../assets/apple-touch-icon.png">
+<style>
+/* ============================================================
+   台灣蹄兔科技 — NFC 名片官網 v4（淺米白、潮流版、手機優先）
+   單一 HTML 檔、不連外部字型或 CDN、沒有追蹤碼、不送出任何資料
+   ============================================================ */
+:root{
+  --bg:#F5F1E8; --bg-soft:rgba(255,255,255,.55); --card:#FFFFFF; --card-2:#FBF8F1; --nav-bg:rgba(245,241,232,.78);
+  --ink:#0B0F14; --dim:#5A6270; --line:rgba(11,15,20,.10); --line-strong:rgba(11,15,20,.2);
+  --teal:#0F9E89; --teal-ink:#0A6E60; --teal-tint:rgba(15,158,137,.11); --mint:#36E2C8; --violet:#8A6CFF; --amber:#8F5400; --gold:#E6C27A;
+  --todo-bg:#FFE9A8; --todo-fg:#5A3E00; --todo-line:#C9961A;
+  --island:#0B0F14; --island-fg:#F5F1E8; --island-dim:rgba(245,241,232,.72); --island-line:rgba(245,241,232,.35);
+  --shadow:0 24px 60px -28px rgba(11,15,20,.35); --shadow-sm:0 1px 0 rgba(11,15,20,.03),0 12px 30px -24px rgba(11,15,20,.3);
+  --glow-a:rgba(54,226,200,.55); --glow-b:rgba(138,108,255,.42); --glow-c:rgba(15,158,137,.35); --noise-blend:multiply; --noise-op:.05;
+  --sans:-apple-system,"SF Pro Display","PingFang TC","Noto Sans TC",sans-serif;
+  --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --container:1280px; --gutter:20px; --r:28px; --r-lg:32px;
+  color-scheme:light;
+}
+@media (min-width:768px){:root{--gutter:40px}}
+@media (prefers-color-scheme:dark){
+  :root{--bg:#0B0F14; --bg-soft:rgba(255,255,255,.035); --card:#121821; --card-2:#0F151E; --nav-bg:rgba(11,15,20,.72);
+    --ink:#F2EEE6; --dim:#A3ACBA; --line:rgba(242,238,230,.1); --line-strong:rgba(242,238,230,.22);
+    --teal:#36E2C8; --teal-ink:#5CEBD3; --teal-tint:rgba(54,226,200,.12); --amber:#F2C56B;
+    --todo-bg:#3A2D00; --todo-fg:#FFD166; --todo-line:#FFD166;
+    --island:#F5F1E8; --island-fg:#0B0F14; --island-dim:rgba(11,15,20,.7); --island-line:rgba(11,15,20,.3);
+    --shadow:0 24px 60px -28px rgba(0,0,0,.7); --shadow-sm:0 12px 30px -24px rgba(0,0,0,.6);
+    --glow-a:rgba(54,226,200,.22); --glow-b:rgba(138,108,255,.26); --glow-c:rgba(15,158,137,.18); --noise-blend:screen; --noise-op:.06;
+    color-scheme:dark}
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%;scroll-padding-top:84px}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.7;overflow-x:hidden;position:relative}
+/* 細顆粒噪點：SVG feTurbulence，疊在最上層但不吃點擊 */
+body::after{content:"";position:fixed;inset:0;z-index:9000;pointer-events:none;opacity:var(--noise-op);mix-blend-mode:var(--noise-blend);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");background-size:200px 200px}
+a{color:inherit}
+img,svg{display:block;max-width:100%}
+:focus-visible{outline:3px solid var(--teal-ink);outline-offset:3px;border-radius:8px}
+.container{max-width:var(--container);margin:0 auto;padding:0 var(--gutter)}
+.sr-only,.live{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.todo{background:var(--todo-bg);color:var(--todo-fg);border-bottom:2px dashed var(--todo-line);padding:0 .3em;border-radius:4px}
+.preview-bar{position:relative;z-index:51;background:var(--todo-bg);color:var(--todo-fg);font-size:13px;text-align:center;padding:7px 16px}
+
+/* 背景光暈：大色塊、模糊 90px，固定在最底層 */
+.glows{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+.glows i{position:absolute;border-radius:50%;filter:blur(90px)}
+.glows i:nth-child(1){width:70vmax;height:70vmax;left:-28vmax;top:-32vmax;background:radial-gradient(closest-side,var(--glow-a),transparent 72%)}
+.glows i:nth-child(2){width:60vmax;height:60vmax;right:-26vmax;top:8vh;background:radial-gradient(closest-side,var(--glow-b),transparent 72%)}
+.glows i:nth-child(3){width:64vmax;height:64vmax;left:6vw;bottom:-40vmax;background:radial-gradient(closest-side,var(--glow-c),transparent 72%)}
+
+/* type */
+h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+h2{text-wrap:balance}
+.display{font-size:clamp(40px,6.4vw,84px);line-height:1.02;letter-spacing:-.03em;font-weight:800}
+h2{font-size:clamp(30px,4.6vw,54px);line-height:1.1;letter-spacing:-.03em}
+h3{font-size:20px;line-height:1.4;font-weight:700;letter-spacing:-.01em}
+.kicker{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--teal-ink);margin-bottom:12px}
+.lead{font-size:clamp(17px,1.4vw,20px);color:var(--dim);max-width:36em}
+.dim{color:var(--dim)}
+.small{font-size:15px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--teal-ink);display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border:1px solid var(--line);border-radius:999px;background:var(--bg-soft)}
+.eyebrow::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 4px var(--teal-tint);flex:none}
+
+/* buttons：pill、hover 上浮、按下縮 .98 */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 26px;border-radius:999px;font:inherit;font-weight:700;font-size:16px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;white-space:nowrap;transition:translate .15s ease,scale .15s ease,box-shadow .15s ease,background .15s ease}
+.btn svg{width:20px;height:20px;fill:currentColor;flex:none}
+.btn:hover{translate:0 -2px}
+.btn:active{scale:.98;translate:0 0}
+.btn-line{background:var(--ink);color:var(--bg);box-shadow:0 14px 30px -14px rgba(11,15,20,.5)}
+.btn-teal{background:var(--teal);color:#0B0F14}
+.btn-ghost{border-color:var(--line-strong);color:var(--ink);background:transparent}
+.btn-ghost:hover{background:var(--bg-soft)}
+.textlink{color:var(--dim);font-size:15px;font-weight:600}
+.textlink:hover{color:var(--ink)}
+
+/* nav */
+.nav{position:sticky;top:0;z-index:50;background:var(--nav-bg);backdrop-filter:saturate(1.3) blur(14px);-webkit-backdrop-filter:saturate(1.3) blur(14px);border-bottom:1px solid var(--line)}
+.nav .container{height:68px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+.logo img{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none;box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--teal-tint)}
+.logo b{font-size:17px;display:block;line-height:1.25;letter-spacing:-.01em}
+.logo small{font-family:var(--mono);font-size:10px;color:var(--dim);display:block;letter-spacing:.08em;line-height:1.3}
+.tabs{display:flex;align-items:center;gap:26px;font-size:15px;font-weight:600}
+.tabs a{text-decoration:none;color:var(--dim)}
+.tabs a:hover{color:var(--ink)}
+.tabs .btn,.tabs .btn:hover{min-height:42px;padding:8px 18px;font-size:15px;color:var(--bg)}
+@media (max-width:960px){.tabs a:not(.btn){display:none}}
+
+/* hero */
+.hero{position:relative;padding:48px 0 32px}
+.hero-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:36px;align-items:center}
+.hero-copy{display:flex;flex-direction:column;gap:22px;align-items:flex-start}
+.hero-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+@media (min-width:1180px){
+  .hero{padding:72px 0 56px}
+  .hero-grid{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:48px}
+}
+@media (max-width:600px){.hero-actions .btn{width:100%}}
+
+/* 場景：純 CSS 的 NFC 卡＋手機 */
+.scene{--sw:480px;--sh:500px;--pw:186px;--ph:384px;--px:20px;--py:60px;--cw:280px;--ch:174px;--cb:56px;--tx:198px;--ty:-214px;
+  position:relative;width:min(100%,var(--sw));height:var(--sh);margin:0 auto}
+@media (max-width:600px){.scene{--sw:360px;--sh:440px;--pw:160px;--ph:330px;--px:6px;--py:48px;--cw:232px;--ch:144px;--cb:52px;--tx:104px;--ty:-200px}}
+.phone{position:absolute;right:var(--px);top:var(--py);width:var(--pw);height:var(--ph);border-radius:44px;background:#0B0F14;box-shadow:0 50px 90px -40px rgba(11,15,20,.6),0 0 0 2px #2A3340,inset 0 0 0 5px #121821;padding:16px 10px 12px;rotate:4deg}
+.notch{position:absolute;left:50%;top:13px;width:68px;height:18px;margin-left:-34px;border-radius:12px;background:#000;z-index:2}
+.screen{position:relative;width:100%;height:100%;border-radius:32px;overflow:hidden;background:linear-gradient(170deg,#141C2C,#070B14);display:flex;flex-direction:column;align-items:center;padding:36px 12px 12px;gap:6px;color:#E6F4FF;clip-path:inset(0 round 32px);transition:clip-path .4s ease}
+.screen.swap{clip-path:inset(0 0 100% 0 round 32px)}
+.screen .wm{font-size:9px;color:var(--gold);letter-spacing:.04em;opacity:.9}
+.screen .co{font-family:var(--mono);font-size:9px;letter-spacing:.14em;color:var(--gold);margin-top:2px}
+.screen .av{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:22px;font-weight:700;color:var(--gold);border:2px solid var(--gold);margin:8px 0 2px;background:#0B1424}
+.screen .nm{font-size:16px;font-weight:700}
+.screen .tt{font-size:11px;color:#8BA0BF;text-align:center;line-height:1.4}
+.screen .ntag{display:none;font-size:10px;color:var(--mint);border:1px dashed rgba(54,226,200,.5);border-radius:999px;padding:1px 8px;line-height:1.5}
+.screen.newbie .ntag{display:inline-block}
+.screen .sv{margin-top:auto;width:100%;min-height:34px;border-radius:12px;background:var(--mint);color:#0B0F14;font-size:12px;font-weight:700;display:grid;place-items:center;transition:transform .15s,filter .15s}
+.screen .sv.press{transform:scale(.94);filter:brightness(.85)}
+.screen .row{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.screen .row span{min-height:28px;border-radius:10px;border:1px solid rgba(173,210,255,.22);font-size:11px;display:grid;place-items:center;color:#8BA0BF}
+.screen .saved{position:absolute;left:10px;right:10px;bottom:56px;padding:7px;border-radius:10px;background:rgba(9,40,40,.95);border:1px solid var(--mint);color:#7CF0DE;font-size:11px;text-align:center;opacity:0;transform:translateY(6px);transition:all .25s}
+.screen .saved.show{opacity:1;transform:none}
+.screen.gone .av{color:#8BA0BF;border-color:#8BA0BF}
+.screen .gonemsg{display:none;font-size:12px;text-align:center;line-height:1.5;margin-top:8px;padding:8px;border:1px dashed rgba(173,210,255,.22);border-radius:10px}
+.screen.gone .gonemsg{display:block}
+.screen.gone .sv,.screen.gone .row,.screen.gone .ntag{display:none}
+.ripple{position:absolute;left:50%;top:-4px;width:72px;height:72px;margin-left:-36px;pointer-events:none}
+.ripple i{position:absolute;inset:0;border-radius:50%;border:2px solid var(--mint);opacity:0}
+.phone.tap .ripple i{animation:ripple 1.1s ease-out}
+.phone.tap .ripple i:nth-child(2){animation-delay:.22s}
+.phone.tap .ripple i:nth-child(3){animation-delay:.44s}
+@keyframes ripple{0%{transform:scale(.3);opacity:.95}100%{transform:scale(2.3);opacity:0}}
+.taplabel{position:absolute;left:50%;top:-52px;transform:translate(-50%,8px);background:var(--ink);color:var(--mint);font-size:12px;font-weight:700;padding:5px 11px;border-radius:999px;opacity:0;transition:opacity .25s,transform .25s;white-space:nowrap;box-shadow:0 10px 24px -10px rgba(11,15,20,.5)}
+.phone.tap .taplabel{opacity:1;transform:translate(-50%,0)}
+.card-wrap{position:absolute;left:0;bottom:var(--cb);z-index:2;transition:transform 1.1s cubic-bezier(.65,0,.25,1);will-change:transform}
+.scene.tap .card-wrap{transform:translate(var(--tx),var(--ty)) rotate(-8deg)}
+.card{position:relative;width:var(--cw);height:var(--ch);border-radius:20px;color:#F5F1E8;background:linear-gradient(135deg,#1C2534 0%,#0B0F14 55%,#161F2E 100%);box-shadow:0 34px 60px -24px rgba(11,15,20,.6),inset 0 1px 0 rgba(255,255,255,.08);padding:18px 20px;display:flex;flex-direction:column;overflow:hidden;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg));transition:transform .25s ease}
+.card::before{content:"";position:absolute;inset:-20% -40%;background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.18) 48%,rgba(255,255,255,.05) 52%,transparent 62%);transform:translateX(var(--sx,-18%));transition:transform .4s ease;pointer-events:none}
+.card::after{content:"";position:absolute;inset:0;border-radius:inherit;border:1px solid rgba(255,255,255,.1);pointer-events:none}
+.card.sway{animation:sway 8s ease-in-out infinite}
+@keyframes sway{0%,100%{transform:perspective(900px) rotateY(-16deg) rotateX(5deg)}50%{transform:perspective(900px) rotateY(16deg) rotateX(-5deg)}}
+.card-top{display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:11px;letter-spacing:.16em;color:var(--gold)}
+.card .nfc{width:22px;height:22px;fill:none;stroke:var(--gold);stroke-width:1.8;stroke-linecap:round}
+.chip{width:38px;height:28px;border-radius:7px;margin-top:14px;background:linear-gradient(135deg,#F0D58A,#B8903C);position:relative;flex:none}
+.chip::before{content:"";position:absolute;inset:6px 8px;border:1px solid rgba(0,0,0,.28);border-radius:3px}
+.card-nm{margin-top:auto;font-size:24px;font-weight:800;letter-spacing:-.01em;line-height:1.2}
+.card-tt{font-size:12px;color:rgba(245,241,232,.72)}
+.card-url{position:absolute;right:20px;bottom:18px;font-family:var(--mono);font-size:10px;letter-spacing:.04em;color:var(--mint)}
+@media (max-width:600px){.card{padding:14px 16px}.card-nm{font-size:20px}.chip{width:32px;height:24px;margin-top:8px}}
+.storetag{position:absolute;right:0;bottom:0;font-size:12px;font-weight:600;color:var(--dim);display:flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:12px;background:var(--card)}
+.storetag i{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--gold)}
+.stage-tools{position:absolute;left:0;bottom:0;display:flex;align-items:center;gap:12px}
+.pause{width:44px;height:44px;border-radius:50%;border:1px solid var(--line-strong);background:var(--card);color:var(--teal-ink);display:grid;place-items:center;cursor:pointer}
+.pause svg{width:18px;height:18px;fill:currentColor}
+.openlink{font-size:14px;color:var(--teal-ink);font-weight:600}
+
+/* 跑馬燈 */
+.marquee{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg-soft);padding:14px 0;-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}
+.marquee-track{display:flex;width:max-content;animation:slide 40s linear infinite}
+.marquee-group{display:flex;flex:none}
+.marquee-group span{display:inline-flex;align-items:center;gap:22px;padding:0 11px;font-weight:700;font-size:15px;letter-spacing:.02em;white-space:nowrap}
+.marquee-group span::after{content:"";width:6px;height:6px;border-radius:50%;background:var(--teal)}
+@keyframes slide{to{transform:translateX(-50%)}}
+
+/* 三個重點 */
+.strip ul{list-style:none;display:grid;grid-template-columns:1fr;gap:12px;padding:20px 0 4px}
+@media (min-width:800px){.strip ul{grid-template-columns:repeat(3,1fr)}}
+.strip li{display:flex;gap:12px;align-items:flex-start;font-size:15px;color:var(--dim);padding:16px 18px;border-radius:20px;background:var(--bg-soft);border:1px solid var(--line)}
+.strip li::before{content:"";flex:none;width:8px;height:8px;margin-top:9px;border-radius:2px;transform:rotate(45deg);background:var(--teal)}
+.strip b{color:var(--ink)}
+
+/* sections */
+.section{padding:64px 0}
+@media (min-width:900px){.section{padding:96px 0}}
+.section.alt{background:var(--bg-soft)}
+.head{max-width:760px;margin-bottom:36px}
+.head p{color:var(--dim);margin-top:14px}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px;box-shadow:var(--shadow-sm);transition:translate .2s ease,box-shadow .2s ease}
+.panel:hover{translate:0 -4px;box-shadow:var(--shadow)}
+.grid3,.grid2,.steps{display:grid;grid-template-columns:1fr;gap:16px}
+@media (min-width:800px){.grid3,.steps{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:repeat(2,1fr)}}
+.mascot{display:flex;align-items:center;gap:18px;max-width:760px;padding:16px 24px 16px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow-sm)}
+.mascot img{width:84px;height:84px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);flex:none}
+.mascot figcaption{font-size:14px;line-height:1.7;color:var(--dim)}
+.mascot b{display:block;font-size:16px;color:var(--ink);margin-bottom:2px}
+.mascot small{display:block;font-size:12px;margin-top:6px}
+.mascot small a{color:inherit}
+@media (max-width:600px){.mascot{align-items:flex-start;gap:14px;padding:12px 16px 12px 12px}.mascot img{width:64px;height:64px}}
+
+/* 示範名片 */
+.sample{display:flex;flex-direction:column;gap:12px}
+.sample .swatch{height:140px;border-radius:18px;display:grid;place-items:center;font-family:var(--mono);font-size:12px;letter-spacing:.14em}
+.sw-gold{background:linear-gradient(150deg,#16130B,#0B0A07);border:1px solid #5B4A24;color:var(--gold)}
+.sw-list{background:linear-gradient(150deg,#121820,#0B0F15);border:1px solid #2B3A4E;color:#CFE3FF}
+.sw-orbit{background:radial-gradient(circle at 50% 50%,#12324A,#060B15 70%);border:1px solid rgba(54,226,200,.4);color:var(--mint)}
+.sample p{color:var(--dim);font-size:15px;flex:1}
+.sample .btn{align-self:flex-start;min-height:44px;font-size:15px}
+.soon{font-size:13px;color:var(--amber);font-weight:600}
+.coffee{display:flex;flex-wrap:wrap;align-items:center;gap:14px;margin-top:24px;color:var(--dim);font-size:15px}
+.btn-coffee{min-height:44px;font-size:15px}
+
+/* 步驟 */
+.steps{counter-reset:s}
+.steps .panel{position:relative;padding-top:66px}
+.steps .panel::before{counter-increment:s;content:"0" counter(s);position:absolute;top:22px;left:28px;font-family:var(--mono);font-size:26px;font-weight:800;color:var(--teal);letter-spacing:-.02em}
+
+.bullets{list-style:none;display:flex;flex-direction:column;gap:10px}
+.bullets li{padding-left:18px;position:relative}
+.bullets li::before{content:"";position:absolute;left:0;top:12px;width:7px;height:7px;border-radius:2px;transform:rotate(45deg);background:var(--teal)}
+.note{font-size:15px;color:var(--dim);margin-top:16px}
+
+/* bento：2 大 4 小 */
+.bento{display:grid;grid-template-columns:1fr;gap:16px}
+.bento .cell{padding:28px;border-radius:var(--r);background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow-sm);display:flex;flex-direction:column;gap:12px;transition:translate .2s ease,box-shadow .2s ease}
+.bento .cell:hover{translate:0 -4px;box-shadow:var(--shadow)}
+.bento .ic{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;background:var(--teal-tint);color:var(--teal-ink)}
+.bento .ic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bento p{color:var(--dim);font-size:16px}
+.bento .big{background:linear-gradient(160deg,var(--card),var(--card-2));padding:32px}
+.bento .big h3{font-size:24px}
+.bento .big p{font-size:17px;max-width:36em}
+@media (min-width:700px){.bento{grid-template-columns:repeat(2,1fr)}.bento .big{grid-column:span 2}}
+@media (min-width:1000px){.bento{grid-template-columns:repeat(4,1fr)}.bento .big{grid-column:span 2}}
+
+/* 查名字 */
+.namecheck{max-width:760px}
+.nc-label{display:block;font-weight:700;margin-bottom:10px}
+.nc-row{display:flex;gap:12px;align-items:stretch}
+.nc-field{flex:1;display:flex;align-items:center;min-width:0;border:1.5px solid var(--line-strong);border-radius:999px;background:var(--card);padding:0 18px;transition:border-color .15s,box-shadow .15s}
+.nc-field:focus-within{border-color:var(--teal);box-shadow:0 0 0 4px var(--teal-tint)}
+.nc-field input{flex:1;min-width:0;min-height:48px;border:0;background:transparent;color:var(--ink);font:inherit;font-family:var(--mono);font-size:17px;outline:none}
+.nc-field input::placeholder{color:var(--dim);opacity:.7}
+.nc-suffix{flex:none;font-family:var(--mono);font-size:15px;color:var(--teal-ink);padding-left:4px;white-space:nowrap}
+.nc-rules{margin-top:10px}
+.nc-result{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px}
+.nc-result [hidden]{display:none!important}
+.nc-result.show{margin-top:18px}
+.nc-msg{font-size:17px;font-weight:700;color:var(--ink)}
+.nc-msg.ok{color:var(--teal-ink)}
+.nc-msg.no{color:var(--amber)}
+.nc-msg.wait{color:var(--dim);font-weight:400}
+.nc-offline{flex-basis:100%}
+@media (max-width:600px){.nc-row{flex-direction:column}.nc-row .btn{width:100%}}
+
+/* pricing */
+.plans{display:grid;grid-template-columns:1fr;gap:18px;align-items:stretch}
+@media (min-width:1000px){.plans{grid-template-columns:1fr 1.12fr 1fr}}
+.plan{display:flex;flex-direction:column;gap:14px;padding:32px 28px}
+.plan h3{font-size:14px;font-weight:700;letter-spacing:.06em;color:var(--dim)}
+.plan.best{border:2px solid transparent;background:linear-gradient(var(--card),var(--card)) padding-box,linear-gradient(135deg,var(--mint),var(--violet)) border-box;box-shadow:0 30px 60px -30px rgba(138,108,255,.45)}
+.plan .badge{align-self:flex-start;font-size:12px;font-weight:800;color:#0B0F14;background:linear-gradient(135deg,var(--mint),var(--violet));padding:4px 12px;border-radius:999px}
+.price{font-size:clamp(40px,4.2vw,56px);font-weight:800;line-height:1.05;letter-spacing:-.03em}
+.price small{font-size:14px;color:var(--dim);font-weight:500;letter-spacing:0}
+.calc{font-family:var(--mono);font-size:13px;color:var(--ink);background:var(--teal-tint);border-radius:16px;padding:12px 14px;line-height:1.9}
+.plan .bullets{font-size:15px}
+.plan .btn{margin-top:auto;align-self:stretch}
+.addons{margin-top:22px;font-size:15px;color:var(--dim);background:var(--bg-soft);border:1px solid var(--line);border-radius:18px;padding:14px 18px}
+.fine{display:grid;grid-template-columns:1fr;gap:16px;margin-top:20px;font-size:15px;color:var(--dim)}
+@media (min-width:900px){.fine{grid-template-columns:repeat(2,1fr)}}
+.fine h3{font-size:16px;color:var(--ink);margin-bottom:6px}
+
+/* faq */
+.faq details{border-bottom:1px solid var(--line);padding:18px 0}
+.faq summary{cursor:pointer;font-weight:700;font-size:18px;list-style:none;display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";flex:none;width:30px;height:30px;border-radius:50%;border:1px solid var(--line-strong);display:grid;place-items:center;color:var(--teal-ink);font-weight:400;font-size:20px;line-height:1}
+.faq details[open] summary::after{content:"–"}
+.faq details p{color:var(--dim);margin-top:12px;font-size:16px;max-width:60em}
+
+.template{font-family:var(--mono);font-size:13px;line-height:1.9;white-space:pre-wrap;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;color:var(--ink)}
+.copybtn{margin-top:12px;min-height:44px;font-size:15px}
+
+/* 最後 CTA：深色島 */
+.island{position:relative;overflow:hidden;background:var(--island);color:var(--island-fg);border-radius:var(--r-lg);padding:64px 24px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px}
+.island::before,.island::after{content:"";position:absolute;border-radius:50%;filter:blur(70px);pointer-events:none}
+.island::before{width:420px;height:420px;left:-120px;top:-180px;background:rgba(54,226,200,.35)}
+.island::after{width:420px;height:420px;right:-150px;bottom:-220px;background:rgba(138,108,255,.42)}
+.island>*{position:relative;z-index:1}
+.island .dim,.island .slots{color:var(--island-dim)}
+.island .btn-line{background:var(--mint);color:#0B0F14;box-shadow:none}
+.island .btn-ghost{border-color:var(--island-line);color:var(--island-fg)}
+.island .btn-ghost:hover{background:rgba(127,127,127,.12)}
+.cta-final .hero-actions{justify-content:center}
+.slots{font-size:14px}
+
+footer{border-top:1px solid var(--line);padding:40px 0 56px;font-size:13px;color:var(--dim)}
+footer .container{display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center}
+footer nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 18px}
+footer a{color:var(--dim);text-decoration:none}
+footer a:hover{color:var(--ink)}
+
+/* 手機底部固定 CTA（桌機不顯示） */
+.mobile-cta{position:fixed;left:12px;right:12px;bottom:calc(10px + env(safe-area-inset-bottom));z-index:60;display:flex;gap:8px;padding:8px;background:var(--island);border-radius:999px;box-shadow:0 20px 40px -16px rgba(11,15,20,.5)}
+.mobile-cta .btn{flex:1;min-height:46px;padding:10px 14px;font-size:15px}
+.mobile-cta .btn-line{background:var(--mint);color:#0B0F14;box-shadow:none}
+.mobile-cta .btn-teal{background:transparent;color:var(--island-fg);border-color:var(--island-line)}
+@media (max-width:899px){body{padding-bottom:92px}}
+@media (min-width:900px){.mobile-cta{display:none}}
+
+/* 滾動進場（沒有 JS 就直接顯示） */
+.js .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s cubic-bezier(.2,.7,.2,1),translate .2s ease,box-shadow .2s ease}
+.js .reveal.in{opacity:1;transform:none}
+
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .js .reveal{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<div class="glows" aria-hidden="true"><i></i><i></i><i></i></div>
+
+<header class="nav">
+  <div class="container">
+    <a class="logo" href="#top"><img src="../assets/hyrax-badge.jpg" alt="" width="34" height="34"><span><b>台灣蹄兔科技</b><small>NFC 數位名片</small></span></a>
+    <nav class="tabs" aria-label="主選單">
+      <a href="#samples">示範名片</a>
+      <a href="#pricing">方案價格</a>
+      <a href="#team">公司團隊</a>
+      <a href="#stores">開店的</a>
+      <a href="#faq">常見問題</a>
+      <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener">LINE 問一下</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero" id="hero">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="eyebrow">目前交期：定稿後約 10–14 個工作天</span>
+      <h1 class="display">換電話、換職稱，<br>名片不用重印。</h1>
+      <p class="lead">一張 NFC 感應卡，加一頁你的名片網頁。對方手機碰一下卡片，就會打開你的名片；再按一下「加入通訊錄」，電話和 Email 就存進他的手機。換電話、換職稱、同事離職，改網頁就好，卡片照用。</p>
+      <div class="hero-actions">
+        <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3C6.5 3 2 6.6 2 11c0 3.9 3.5 7.2 8.3 7.9.3.1.8.2.9.5.1.3.1.7 0 1l-.1.8c0 .2-.2.9.8.5s5.4-3.2 7.4-5.4C20.7 14.8 22 13 22 11c0-4.4-4.5-8-10-8Z"/></svg>LINE 問一下</a>
+        <a class="btn btn-teal" href="#samples">看示範</a>
+        <a class="textlink" href="mailto:dot1000110@gmail.com">或寄 Email</a>
+      </div>
+    </div>
+
+    <div class="scene" id="scene" role="group" aria-label="示範：NFC 卡碰一下手機，就打開名片頁（公司和人名都是虛構的）">
+      <div class="phone" id="phone" aria-hidden="true">
+        <div class="notch"></div>
+        <div class="screen" id="screen">
+          <span class="wm">示範資料・虛構公司</span>
+          <span class="co">雲杉精密</span>
+          <div class="av" id="sAv">林</div>
+          <div class="nm" id="sNm">林可恩</div>
+          <div class="tt" id="sTt">業務經理</div>
+          <span class="ntag">今天報到・名片頁已開好</span>
+          <div class="gonemsg">這位同事已不在本公司服務<br>請改聯絡：總機</div>
+          <div class="row"><span>打電話</span><span>加 LINE</span></div>
+          <div class="sv" id="sSv">加入通訊錄</div>
+          <div class="saved" id="sSaved">已存入通訊錄 ✓</div>
+        </div>
+        <div class="ripple"><i></i><i></i><i></i></div>
+        <span class="taplabel">碰一下</span>
+      </div>
+      <div class="card-wrap" aria-hidden="true">
+        <div class="card" id="card">
+          <div class="card-top"><span>雲杉精密</span><svg class="nfc" viewBox="0 0 24 24"><path d="M8.5 8.5a5 5 0 0 1 0 7M11.5 6a9 9 0 0 1 0 12M14.5 3.5a13 13 0 0 1 0 17"/></svg></div>
+          <div class="chip"></div>
+          <div class="card-nm" id="cNm">陳以安</div>
+          <div class="card-tt" id="cTt">門市店長</div>
+          <span class="card-url">yunshan.hyrax.tw</span>
+        </div>
+      </div>
+      <span class="storetag"><i aria-hidden="true"></i>門市感應牌</span>
+      <div class="stage-tools">
+        <button class="pause" id="pause" type="button" aria-label="暫停動畫"><svg viewBox="0 0 24 24" aria-hidden="true"><path id="pauseIcon" d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg></button>
+        <a class="openlink" id="openlink" href="#samples">用手機打開示範名片 ↓</a>
+      </div>
+      <p class="live" id="live" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <div class="marquee-group"><span>業務</span><span>房仲</span><span>保險</span><span>設計師</span><span>醫美</span><span>店家</span><span>講師</span><span>工程師</span><span>顧問</span><span>診所</span><span>接案者</span><span>新創團隊</span><span>老闆</span></div>
+    <div class="marquee-group"><span>業務</span><span>房仲</span><span>保險</span><span>設計師</span><span>醫美</span><span>店家</span><span>講師</span><span>工程師</span><span>顧問</span><span>診所</span><span>接案者</span><span>新創團隊</span><span>老闆</span></div>
+  </div>
+</div>
+<p class="sr-only">適合：業務、房仲、保險、設計師、醫美、店家、講師、工程師、顧問、診所、接案者、新創團隊、老闆。</p>
+
+<section class="strip" aria-label="重點">
+  <div class="container">
+    <ul>
+      <li><span><b>單張 NT$1,290 起・公司團隊 5 人起・含運</b></span></li>
+      <li><span>第一年代管已含；第 2 年起每張每年 NT$360，可以不續。<b>不會自動扣款</b>，不續約卡照常能碰</span></li>
+      <li><span>iPhone XS 以後不用裝 App・Android 打開 NFC 就能讀・讀不到可以掃卡背 QR・晶片寫好後上鎖</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section" id="samples">
+  <div class="container">
+    <div class="head">
+      <p class="kicker">Try it</p>
+      <h2>先用你的手機試一張</h2>
+      <p>下面是示範名片，公司和人名都是虛構的，電話也打不出去。用手機點開，看到的就是客人碰到卡片後的畫面，可以試按「加入通訊錄」。在電腦上也能點開看，不過用手機看最接近真實體驗。</p>
+    </div>
+    <div class="grid3">
+      <article class="panel sample">
+        <div class="swatch sw-gold">BLACK · GOLD</div>
+        <h3>黑金框款</h3>
+        <p>穩重、正式，適合老闆、顧問、金融和法律相關的團隊。</p>
+        <span class="soon">示範頁製作中</span>
+      </article>
+      <article class="panel sample">
+        <div class="swatch sw-list">BUTTON LIST</div>
+        <h3>按鈕列表款</h3>
+        <p>電話和 LINE 一眼就找得到，適合門市、診所、房仲、業務。</p>
+        <span class="soon">示範頁製作中</span>
+      </article>
+      <article class="panel sample">
+        <div class="swatch sw-orbit">ORBIT</div>
+        <h3>星軌款</h3>
+        <p>深色、有動態，適合工程、新創、設計團隊；動畫可以關掉。</p>
+        <a class="btn btn-ghost" href="../c/demo/">打開示範：星軌款</a>
+      </article>
+    </div>
+    <p class="note">三款都會換成你們的 logo、品牌色和字體；也可以中英切換，不用另外綁門號。</p>
+    <div class="coffee"><span>示範名片隨時都能免費看。</span></div>
+  </div>
+</section>
+
+<section class="section alt" id="how">
+  <div class="container">
+    <div class="head"><p class="kicker">How it works</p><h2>對方手機碰一下，會發生什麼？</h2></div>
+    <div class="steps">
+      <div class="panel"><h3>點亮螢幕，靠過去</h3><p class="dim small">先請對方點亮手機螢幕，再把卡片靠過去。iPhone 碰機身上緣；Android 看機型，大多在背面中間。</p></div>
+      <div class="panel"><h3>點開通知</h3><p class="dim small">手機會跳出通知，點開就是你的名片網頁，不用裝 App。</p></div>
+      <div class="panel"><h3>按一下存好</h3><p class="dim small">按「加入通訊錄」，電話和 Email 就存進他的手機；按「加 LINE」可以直接加好友。</p></div>
+    </div>
+    <p class="note">卡片由你自己留著用，給對方碰一下就好，不用一張一張發出去。碰了沒反應的話，翻到背面掃 QR code，打開的是同一頁。</p>
+  </div>
+</section>
+
+<section class="section" id="problems">
+  <div class="container">
+    <div class="head"><p class="kicker">Why</p><h2>公司的名片，常卡在這三件事</h2></div>
+    <div class="grid3">
+      <div class="panel"><h3>新人報到了，名片還在印</h3><p class="dim small">這段時間只能把電話手寫給客戶，或請客戶加私人 LINE。</p></div>
+      <div class="panel"><h3>升遷、換號碼，整盒作廢</h3><p class="dim small">有人升遷、換分機、換手機號碼，整盒名片就作廢，每個人手上的版本也不太一樣。</p></div>
+      <div class="panel"><h3>業務離職，客戶跟著斷線</h3><p class="dim small">客戶手上的名片跟著失效。打過去沒人接，客戶不一定會再找公司。</p></div>
+    </div>
+    <p class="note">NFC 名片把內容放在網頁上，卡片只負責把客人帶到那一頁。人員有變動，改網頁就好。</p>
+  </div>
+</section>
+
+<section class="section alt" id="includes">
+  <div class="container">
+    <div class="head"><p class="kicker">What you get</p><h2>你會拿到什麼</h2></div>
+    <div class="bento">
+      <article class="cell big">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2.5" y="5" width="19" height="14" rx="3"/><path d="M6.5 15h4M13 9.5a3 3 0 0 1 0 5M15.5 7.5a6 6 0 0 1 0 9"/></svg></span>
+        <h3>一張 NFC 感應卡</h3>
+        <p>正面印你們的設計，背面印姓名和 QR code，兩面都是彩色直接印在卡上。晶片寫好你的網址後就上鎖。</p>
+      </article>
+      <article class="cell">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2.5" width="14" height="19" rx="2.5"/><path d="m9 12 2 2 4-4M10.5 18.5h3"/></svg></span>
+        <h3>交件前測試</h3>
+        <p>每張卡都用 iPhone 和 Android 各碰一次，確定讀得到才交給你。</p>
+      </article>
+      <article class="cell">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 4.5 6v5c0 4.5 3.2 8.2 7.5 10 4.3-1.8 7.5-5.5 7.5-10V6L12 3Z"/><path d="m9.5 12 1.8 1.8L15 10"/></svg></span>
+        <h3>第一年代管</h3>
+        <p>包含主機、網址，和每年 2 次資料修改。上線 7 天內發現錯字，免費改，不算在次數裡。</p>
+      </article>
+      <article class="cell">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 5 3.5-5 3.5z"/></svg></span>
+        <h3>「怎麼遞卡」說明小卡</h3>
+        <p>附一張說明小卡，和一支 30 秒教學影片。</p>
+      </article>
+      <article class="cell">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h3l1.5-2h7L17 8h3v11H4z"/><circle cx="12" cy="13" r="3.2"/></svg></span>
+        <h3>實拍照片</h3>
+        <p>卡片正反面、寫卡與上鎖過程的實拍照整理中；想先看，用 LINE 跟我說，我直接傳給你。</p>
+      </article>
+      <article class="cell big">
+        <span class="ic"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></span>
+        <h3>一頁名片網頁</h3>
+        <p>可以撥電話、加 LINE、寄 Email、導航到地址，也能放官網和作品連結；按一下「加入通訊錄」就存好。手機打開不到 300 KB，網路慢也很快。</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="names">
+  <div class="container">
+    <div class="head">
+      <p class="kicker">Your URL</p>
+      <h2>先挑你的網址</h2>
+      <p>每張名片都附一個 <b>你的名字.hyrax.tw</b>，先看看想要的名字還在不在。</p>
+    </div>
+    <div class="panel namecheck">
+      <label class="nc-label" for="nameInput">你想要的名字</label>
+      <div class="nc-row">
+        <div class="nc-field">
+          <input id="nameInput" type="text" placeholder="alice" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" aria-describedby="nameRules">
+          <span class="nc-suffix" aria-hidden="true">.hyrax.tw</span>
+        </div>
+        <button class="btn btn-line" type="button" id="nameBtn">查詢</button>
+      </div>
+      <p class="nc-rules small dim" id="nameRules">小寫英文、數字和連字號（-），3–24 個字；名字只在你的手機上比對，不會傳出去。</p>
+      <div class="nc-result" id="nameResult" aria-live="polite">
+        <p class="nc-msg" id="nameMsg" hidden></p>
+        <a class="btn btn-line" id="nameCta" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener" hidden>用 LINE 預約這個名字</a>
+        <p class="nc-offline small dim" id="nameOffline" hidden></p>
+      </div>
+      <p class="note">名字先到先得；發過的名字不會再給別人，所以你的卡永遠有效。</p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="container">
+    <div class="head"><p class="kicker">Pricing</p><h2>方案與價格</h2><p>都含台灣本島運費。方案確認後，我用 LINE 或 Email 傳綠界付款連結（信用卡），也可以轉帳。網站本身不收款、不收資料。</p></div>
+    <div class="plans">
+      <article class="panel plan">
+        <h3>單張款</h3>
+        <p class="price">NT$1,290</p>
+        <p class="dim small">給自己用：業務、顧問、接案者，或想先試一張的老闆。</p>
+        <ul class="bullets">
+          <li>從黑金框、按鈕列表、星軌三款挑一款，換成你的顏色、logo 和資料</li>
+          <li>1 張雙面彩印 NFC 卡＋1 頁名片網頁</li>
+          <li>附你的專屬網址 <b>你的名字.hyrax.tw</b>，晶片直接寫這個網址</li>
+          <li>設計可以改 1 輪；第一年內可以再改資料 2 次</li>
+          <li>30 天內升級團隊款，NT$1,290 全額折抵，你這張直接算進人數</li>
+          <li>7-11 店到店寄送；新竹可以面交</li>
+        </ul>
+        <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener">LINE 問一下</a>
+      </article>
+      <article class="panel plan best">
+        <span class="badge">公司推薦</span>
+        <h3>團隊款（5–30 人）</h3>
+        <p class="price">NT$2,900 <small>公司版型（一次）</small><br>＋NT$990 <small>／每人</small></p>
+        <div class="calc">5 人　NT$7,850<br>10 人 NT$12,800<br>20 人 NT$22,700<br>30 人 NT$32,600</div>
+        <ul class="bullets">
+          <li>照你們的 logo 和品牌色，做一套公司專屬版型。視覺用 AI 生成，再由人工挑圖、修圖、排版</li>
+          <li>每人 1 頁名片網頁加 1 張 NFC 卡。正面大家一樣，背面印各自的姓名和 QR</li>
+          <li>公司專屬網址 <b>公司名.hyrax.tw</b>，每位同事是 <b>公司名.hyrax.tw/名字/</b></li>
+          <li>設計可以改 2 輪；第一年每人可以再改資料 2 次</li>
+          <li>新人加入每人 NT$990；同事離職當天，就把他的頁面換成公司聯絡頁</li>
+          <li>交卡當天教 10 分鐘「怎麼遞卡」（新竹面交，外縣市用視訊）</li>
+        </ul>
+        <p class="note" style="margin-top:0">超過 30 人請先 LINE 問，可能要分兩批做（我一個人經營，每月能接的量有限）。不到 5 人、只想把同一款版型換成公司顏色，買單張款比較划算。</p>
+        <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener">LINE 約 30 分鐘示範</a>
+      </article>
+      <article class="panel plan">
+        <h3>門市感應牌</h3>
+        <p class="price">3 片 NT$990</p>
+        <p class="dim small">給開店的人用：客人手機碰一下，就能加你們的 LINE 或打開 Google 評論頁。</p>
+        <p class="soon">實測中，預計 11 月下旬開放</p>
+        <a class="btn btn-ghost" href="#stores">看詳細內容 ↓</a>
+      </article>
+    </div>
+    <p class="addons"><b>加購：</b>新人加入 NT$990／人（限團隊款、且仍在代管期內的公司）｜多一張同網址的卡 NT$590｜AI 插畫頭像 NT$300／人｜老闆專屬動態版型 NT$2,490｜超過次數的資料修改 NT$150／次｜改網址名字 NT$150／次（舊名字免費轉到新名字，舊卡照常能碰）</p>
+    <div class="fine">
+      <div><h3>第 2 年起</h3><p>每張卡每年 NT$360，保留你的網址和名片頁。到期前 30 天會通知你，付了才續約，不會自動扣款。不續約的話，名片頁維持最後的內容至少再保留 1 年，卡照常能碰，只是不能再改；也可以免費幫你改成轉到你指定的網址。</p></div>
+      <div><h3>付款與交期</h3><p>單張款付全額；團隊款先付 50% 訂金，定稿後付尾款。收到資料後，單張款 3 個工作天、團隊款 5 個工作天給初稿；定稿後隔 1 個工作天名片網頁上線，卡片約 10–14 個工作天交到你手上。</p></div>
+      <div><h3>客製商品說明</h3><p>卡片和名片頁是依你的資料、logo 和照片客製的。定稿前可以隨時取消，已付金額全額退還。你回覆「確認定稿」、我開始製作後，依《通訊交易解除權合理例外情事適用準則》第 2 條第 2 款，不適用消保法第 19 條的 7 日解除權。收到 14 天內發現印刷瑕疵或讀不到，免費重做。</p></div>
+      <div><h3>保險、金融、醫療相關行業</h3><p>名片頁只放身分和聯絡方式，內容以公司或主管機關允許的版本為準（詳見常見問題）。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="team">
+  <div class="container">
+    <div class="head"><p class="kicker">For teams</p><h2>人員有變動，改網頁就好</h2></div>
+    <div class="grid2">
+      <div class="panel"><h3>新人報到</h3><p class="dim small">窗口傳一句「新人：姓名、職稱、電話」給我，或請新人自己用資料模板傳來。1 個工作天內開好名片頁，當天就能先用 QR 或連結；實體卡跟下一批一起印。</p></div>
+      <div class="panel"><h3>升遷、換電話、換 LINE</h3><p class="dim small">改網頁就好，卡片照用。每人每年 2 次內免費。</p></div>
+      <div class="panel"><h3>同事離職</h3><p class="dim small">通知我的當天，他的頁面就換成「已不在本公司服務，請改聯絡：（公司窗口）」，個人資料也會刪除。客人不管什麼時候碰那張卡，都會被帶回公司。</p></div>
+      <div class="panel"><h3>卡片遺失</h3><p class="dim small">補一張同網址的卡，NT$590。擔心被別人撿到的話，也可以改一個新名字，舊名字改成暫停頁。</p></div>
+    </div>
+    <p class="note">資料怎麼交：每位同事自己用 LINE 或 Email 傳資料、自己同意公開刊登，不用窗口一個一個代填。</p>
+  </div>
+</section>
+
+<section class="section" id="stores">
+  <div class="container">
+    <div class="head"><p class="kicker">For stores</p><h2>開店的：客人碰一下，加 LINE 或留評論</h2><p>把感應貼片貼在櫃檯、結帳處或菜單架上，客人手機碰一下，就會加你們的 LINE 官方帳號，或打開 Google 評論頁。</p></div>
+    <ul class="bullets panel">
+      <li>3 片 NT$990，含運，可以單買，不用先買名片</li>
+      <li>用的是抗金屬貼片，不鏽鋼桌、金屬櫃檯也讀得到</li>
+      <li>每片可以設定一個去處（LINE、Google 評論或菜單），之後要換去處，不用重做貼片</li>
+      <li>面貼印了店名和 QR，客人手機沒開 NFC 也能掃</li>
+      <li>第 2 年起不收費；換去處每次 NT$150</li>
+    </ul>
+    <p class="note">Google 不允許用好處換評論，也不允許只邀請滿意的客人。所以貼片上只寫「歡迎留下評論」這類中性的邀請，不寫「五星送小菜」，免得你們的評論被刪。目前還在測試耐不耐油汙、經不經得起每天擦桌，預計 11 月下旬開放。想先排隊的話，用 LINE 告訴我。</p>
+  </div>
+</section>
+
+<section class="section alt" id="why-price">
+  <div class="container">
+    <div class="head"><p class="kicker">Honest pricing</p><h2>NFC 貼紙不是才十幾塊嗎？</h2><p>對，晶片本身很便宜，空白 NFC 貼紙一枚十幾塊就買得到。想自己買卡、用免費的 NFC Tools App 寫網址，也完全可以。你付的錢裡，晶片只占一小部分。以 10 人團隊款 NT$12,800 為例：</p></div>
+    <ul class="bullets panel">
+      <li>10 張雙面彩印卡、卡套、運費、刷卡手續費：約 NT$2,000</li>
+      <li>公司專屬版型設計、10 頁名片網頁、寫卡上鎖和雙機測試、交卡教學：約 7 小時</li>
+      <li>到公司示範、報價、整理大家的資料：約 3 小時</li>
+      <li>第一年的代管：每人 2 次資料修改，加上新人開頁、離職改頁</li>
+    </ul>
+    <p class="note">工時是目前的估計，做完前幾單後會換成實際數字。</p>
+  </div>
+</section>
+
+<section class="section" id="trust">
+  <div class="container">
+    <div class="head"><p class="kicker">Trust</p><h2>該鎖的都鎖了，也不會把你綁住</h2></div>
+    <div class="grid2">
+      <ul class="bullets panel">
+        <li><b>寫入後上鎖</b>：網址寫進晶片後就永久鎖定。別人用手機 App 也改不了，不會被改成釣魚網站。</li>
+        <li><b>網址你來選</b>：你的名字.hyrax.tw；不想露名的人可以用 6 碼隨機碼。不用流水號，別人沒辦法照順序把全公司的電話掃下來。</li>
+        <li><b>預設不讓 Google 收錄</b>：同事的手機號碼一般不會出現在搜尋結果裡；想被搜到，再幫你打開。</li>
+        <li><b>不放追蹤碼</b>：名片頁沒有廣告追蹤碼，也不用 cookie。</li>
+      </ul>
+      <ul class="bullets panel">
+        <li><b>資料不進程式碼庫</b>：你的資料只存在我自己的電腦。同事離職或你要求刪除時，我會從網站移除，也會刪掉含舊資料的歷史版本。</li>
+        <li><b>不會自動扣款</b>：續約一定要你自己付款才算數。</li>
+        <li><b>不續約，卡照常能碰</b>：名片頁維持最後的內容，至少再保留 1 年；也可以隨時免費轉到你指定的網址。</li>
+        <li><b>如果我不做了</b>：至少提前 6 個月通知，把檔案整包交給你，舊網址會轉到你指定的地方。</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="section alt" id="process">
+  <div class="container">
+    <div class="head"><p class="kicker">Process</p><h2>從問問看到拿到卡，6 個步驟</h2></div>
+    <div class="steps">
+      <div class="panel"><h3>問問看</h3><p class="dim small">用 LINE 告訴我人數、產業、希望哪天拿到。公司團隊可以約 30 分鐘示範，新竹地區我到公司，其他地區用視訊。</p></div>
+      <div class="panel"><h3>確認方案、付款</h3><p class="dim small">我先傳交易須知和隱私權告知，再傳綠界付款連結或轉帳帳號。</p></div>
+      <div class="panel"><h3>傳資料</h3><p class="dim small">照下面「要準備的資料」，每個人自己用 LINE 或 Email 傳給我，大約 5 分鐘。</p></div>
+      <div class="panel"><h3>看初稿</h3><p class="dim small">單張款 3 個工作天、團隊款 5 個工作天內，給你一個用手機看的預覽連結。</p></div>
+      <div class="panel"><h3>確認定稿</h3><p class="dim small">你回覆「確認定稿」，隔 1 個工作天名片網頁就上線。</p></div>
+      <div class="panel"><h3>拿到卡</h3><p class="dim small">卡片寫入、上鎖、用兩支手機測過後交給你。新竹面交會順便教 10 分鐘，外縣市寄 7-11，另外用視訊教。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="prepare">
+  <div class="container">
+    <div class="head"><p class="kicker">Prepare</p><h2>要準備的資料（每個人自己傳）</h2><p>請把下面這段複製到 LINE 或 Email，填好後傳給我：</p></div>
+    <pre class="template" id="tpl">【蹄兔 NFC 名片資料】
+1. 名片上的姓名（中文／英文）：
+2. 公司、部門、職稱（保險、金融、醫療業請填公司核可的版本）：
+3. 電話（要顯示幾支？哪一支是手機？）：
+4. Email：
+5. LINE（加好友網址或 ID，選填）：
+6. 想放的連結（官網、作品、社群，最多 4 個，選填）：
+7. 頭像（擇一）：不放／姓名縮寫／公司 logo／AI 插畫（加購）
+8. 收件方式：新竹面交，或 7-11 門市（請寫店名）
+
+同意事項（請照抄在訊息最後）：
+・我已經讀過交易須知和隱私權告知（hyrax.tw/terms、hyrax.tw/privacy）
+・我同意把上面的資料公開刊登在我的名片網頁（預設不讓搜尋引擎收錄）
+・（有附照片的話）照片是我本人，是自拍，或已經取得攝影者同意
+・（有加購 AI 頭像的話）我同意照片傳到 OpenAI（美國）處理
+・（保險、金融、醫療業）內容已經確認符合公司規定和相關法規</pre>
+    <button class="btn btn-ghost copybtn" type="button" id="copyTpl">複製這段</button>
+  </div>
+</section>
+
+<section class="section alt faq" id="faq">
+  <div class="container">
+    <div class="head"><p class="kicker">FAQ</p><h2>常見問題</h2></div>
+    <details><summary>對方要先裝 App 嗎？</summary><p>不用。iPhone XS 以後的機型（包括 SE 第 2 代），只要螢幕亮著、開機後解鎖過，碰一下就會跳出通知，點開就是你的名片頁。iPhone 7、8、X 要先從控制中心打開 NFC 讀取器，更舊的 iPhone 讀不到。Android 要先在設定裡打開 NFC。如果讀不到，掃卡背的 QR code，打開的是同一頁。</p></details>
+    <details><summary>碰了沒反應怎麼辦？</summary><p>先檢查四件事：對方螢幕有沒有亮；iPhone 有沒有用機身上緣去碰（Android 依機型而定，大多在背面中間）；手機殼是不是太厚、有沒有金屬片或磁吸環；手機是不是正開著相機或 Apple Pay。真的不行就翻面掃 QR。交卡時附的說明小卡和 30 秒影片會教你：遞卡前先請對方把螢幕打開。</p></details>
+    <details><summary>卡片要一張一張發給客人嗎？</summary><p>不用。卡是你自己留著用的，見面時拿給對方的手機碰一下，他的手機就會打開你的名片頁。所以一個人通常一張就夠了；想多放一張在包包裡，可以加購同網址的卡，NT$590。</p></details>
+    <details><summary>換電話、換職稱，要重做卡嗎？</summary><p>不用。卡片裡只存一個固定網址，要改的是網頁。用 LINE 或 Email 告訴我要改什麼就好，每年 2 次免費，超過的每次 NT$150。</p></details>
+    <details><summary>為什麼改資料要找你，不能自己改？</summary><p>目前是由我幫你改：你傳一句話給我，我改好、檢查過再上線，你不用學後台，也不用記帳號密碼。一般修改固定在每週二、五上線；同事離職、要求刪除資料，當天就處理。等客人變多，我會考慮做「自助修改連結」，但會先把資安顧好再開放。</p></details>
+    <details><summary>同事離職了，卡片收不回來怎麼辦？</summary><p>不用收回來。你通知我的當天，他的頁面就會換成「這位同事已不在本公司服務，請改聯絡：（公司窗口）」，他的個人資料也會刪除。客人不管什麼時候碰那張卡，都會被帶回公司。</p></details>
+    <details><summary>新人到職，多久有名片可以用？</summary><p>名片頁 1 個工作天內開好，新人可以先用 QR code 或連結。實體卡跟下一批一起印；如果要單獨印，大約 10–14 個工作天。新人加入每人 NT$990，限已經買團隊款、而且還在代管期內的公司。</p></details>
+    <details><summary>第 2 年要錢嗎？會自動扣款嗎？</summary><p>第一年的代管已經含在價格裡。第 2 年起每張卡每年 NT$360，到期前 30 天我會通知你，你付了才續約，不會自動扣款。不續約的話，名片頁會停在最後的內容，至少再保留 1 年，卡還是碰得開，只是不能再改。</p></details>
+    <details><summary>卡片會不會被別人改成別的網址？</summary><p>不會。寫入之後我會把晶片永久鎖定，任何人用手機 App 都改不了，連我自己也改不了。之後要換內容，改的是網頁。</p></details>
+    <details><summary>我的電話會被 Google 搜到嗎？資料放在哪裡？</summary><p>名片頁預設會告訴搜尋引擎「不要收錄」，一般不會出現在搜尋結果。不過拿到網址、碰過卡片的人都看得到，所以只放你願意給客人看的資料。名片頁不放任何追蹤碼。你的資料存在我自己的電腦裡，不會放進程式碼庫。完整說明請看《隱私權與個資告知》。</p></details>
+    <details><summary>卡片是在哪裡做的？</summary><p>卡片由台灣的印刷廠做雙面彩色印刷。晶片是 NTAG 系列，賣家標示是 NXP 原廠，我正在請對方提供原廠證明。寫入、上鎖和測試都在新竹完成。老實說，市面上大多數空白 NFC 卡是中國製造的；如果貴公司需要其他產地的卡，請先告訴我，我另外報價。</p></details>
+    <details><summary>可以退款嗎？</summary><p>定稿前隨時可以取消，已付的錢全額退還。卡片和名片頁是照你的資料客製的，所以你回覆「確認定稿」、我開始製作之後，依規定不適用 7 天解除權。如果卡片有印刷瑕疵或讀不到，收到後 14 天內告訴我，免費重做。</p></details>
+    <details><summary>可以開統一發票嗎？公司要怎麼報帳？</summary><p>我目前是以個人身分接案，還沒登記商號，所以沒辦法開統一發票，會開個人收據，品項分開列「NFC 卡片」和「設計與代管」。公司付款給個人時，會計通常需要我的身分證字號和地址來開扣（免）繳憑單。實際怎麼歸類、要不要扣繳，以貴公司會計和國稅局的認定為準。如果報帳一定要統一發票，請在詢問時先告訴我。</p></details>
+    <details><summary>我是保險或金融業務，可以做嗎？</summary><p>可以。名片頁只放所屬公司、公司核可的職稱和登錄資訊，以及聯絡方式，不放商品名稱、報酬率或促銷字眼。請先把內容給公司確認，傳資料時附一句「內容已確認符合公司規定」。</p></details>
+    <details><summary>我們是診所或醫美，可以做嗎？</summary><p>可以。名片頁只放身分、聯絡方式和院所地址，不放療程、價格、優惠，也不放前後對比照。醫療法對醫療廣告有限制，有疑問請先問衛生局或院所的法遵。</p></details>
+    <details><summary>不想放照片可以嗎？AI 頭像是怎麼做的？</summary><p>可以。預設就是不放照片，改用姓名縮寫或公司 logo。AI 插畫頭像是加購項目：用 ChatGPT 生成幾張讓你挑，我再修圖。只收成年人本人的照片，而且要是自拍，或已經取得攝影師同意。處理時我會關掉「用於訓練模型」的設定。AI 生成的圖，別人也可能生出類似的，所以不保證獨家。</p></details>
+    <details><summary>一定要 5 人以上才能買團隊款嗎？</summary><p>團隊款 5 人起訂。不到 5 人的話，買單張款比較划算，每個人都可以挑同一款版型、換成公司的顏色。團隊款多了公司專屬版型，也包含新人開頁、離職改頁這類管理服務。</p></details>
+  </div>
+</section>
+
+<section class="section" id="who">
+  <div class="container">
+    <div class="head"><p class="kicker">Who</p><h2>誰在做</h2>
+      <p>我是<a href="https://me.hyrax.tw/" target="_blank" rel="noopener">成育典</a>，在新竹研究資安的研究生。「台灣蹄兔科技」是我的品牌，目前用個人身分接案，還沒登記商號，所以開的是個人收據。版型、名片網頁的程式，到每一張卡的寫入、上鎖、測試，都是我自己做。視覺先用 ChatGPT 生成，再由我挑選、修圖、排版，不是手繪。</p>
+      <p>只有我一個人做，每個月能接的單有限，額滿會寫在封面上。目前還沒有可以公開的客戶作品：前 5 家團隊打 9 折、前 10 位單張款 NT$990，只要同意讓我把名片放進作品集（個人資料會遮掉）。</p>
+    </div>
+    <figure class="mascot">
+      <img src="../assets/hyrax-badge.jpg" width="168" height="168" alt="蹄兔的臉部特寫" loading="lazy">
+      <figcaption>
+        <b>品牌吉祥物：蹄兔（Hyrax）</b>
+        住在非洲和中東的小型草食動物，長得像大一號的天竺鼠，演化上卻跟大象、海牛是近親。
+        <small>照片：<a href="https://commons.wikimedia.org/wiki/File:Amneville_27_08_2010_Daman_1.jpg" target="_blank" rel="noopener">Vassil／Wikimedia Commons</a>（CC0）</small>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<section class="section" id="contact">
+  <div class="container">
+  <div class="island cta-final">
+    <h2>先問問看</h2>
+    <p class="dim">用 LINE 告訴我三件事：是自己用還是公司要做（幾個人）、什麼產業、希望哪天拿到。<br>我會在 1 個工作天內回覆。</p>
+    <div class="hero-actions" style="justify-content:center">
+      <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener">LINE 問一下</a>
+      <a class="btn btn-ghost" href="mailto:dot1000110@gmail.com">寄 Email</a>
+    </div>
+    <p class="small dim">網站不收你的任何資料；查名字只在你的手機上比對，不會傳出去。你用 LINE 或 Email 傳來的內容，只用來回覆你和製作名片。</p>
+    <p class="slots">本月還能接：2 家團隊／10 張單張款</p>
+  </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="container">
+    <nav aria-label="頁尾">
+      <a href="#samples">示範名片</a><a href="#pricing">方案價格</a><a href="#faq">常見問題</a><a href="../terms/">交易須知</a><a href="../privacy/">隱私權與個資告知</a>
+    </nav>
+    <p>台灣蹄兔科技｜Email <a href="mailto:dot1000110@gmail.com">dot1000110@gmail.com</a>｜<a href="https://me.hyrax.tw/" target="_blank" rel="noopener">我的數位名片</a></p>
+    <p>© 2026 台灣蹄兔科技 Taiwan Hyrax Tech</p>
+  </div>
+</footer>
+
+<div class="mobile-cta" aria-label="快速聯絡">
+  <a class="btn btn-line" href="https://line.me/ti/p/~danny1060110" target="_blank" rel="noopener">LINE 問一下</a>
+  <a class="btn btn-teal" href="#samples">看示範</a>
+</div>
+
+<script>
+(function(){
+  document.documentElement.classList.add('js');
+  var $=function(id){ return document.getElementById(id); };
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches && !/[?&]motion=1/.test(location.search); // ?motion=1 只給測試用
+
+  // 複製資料模板
+  var cp=$('copyTpl');
+  if(cp){ cp.addEventListener('click',function(){
+    var t=$('tpl').textContent;
+    if(navigator.clipboard){ navigator.clipboard.writeText(t).then(function(){cp.textContent='已複製 ✓';setTimeout(function(){cp.textContent='複製這段';},2000);}); }
+  }); }
+
+  // ===== 滾動進場：進視窗時淡入、上移 16px =====
+  var targets=document.querySelectorAll('.section .head,.section .panel,.bento .cell,.strip li,.mascot,.island');
+  if(!reduce && 'IntersectionObserver' in window){
+    targets.forEach(function(el){ el.classList.add('reveal'); var k=Array.prototype.indexOf.call(el.parentNode.children,el); el.style.transitionDelay=(Math.min(k,5)*70)+'ms'; });
+    var io=new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } }); },{rootMargin:'0px 0px -6% 0px',threshold:.06});
+    targets.forEach(function(el){ io.observe(el); });
+  }
+
+  // ===== 封面：NFC 卡碰手機（純 CSS 場景，JS 只切狀態） =====
+  var people=[
+    {ini:'林',name:'林可恩',role:'業務經理'},
+    {ini:'陳',name:'陳以安',role:'門市店長'},
+    {ini:'吳',name:'吳亞歷',role:'工程師'},
+    {ini:'張',name:'張語晴',role:'客服專員',leaves:true},
+    {ini:'黃',name:'黃新',role:'新進同事',newbie:true}
+  ];
+  var N=people.length;
+  var scene=$('scene'), phone=$('phone'), screen=$('screen'), card=$('card');
+  if(!scene||!phone||!screen||!card) return;
+  var sAv=$('sAv'), sNm=$('sNm'), sTt=$('sTt'), sSv=$('sSv'), sSaved=$('sSaved'), cNm=$('cNm'), cTt=$('cTt');
+  var live=$('live'), pauseBtn=$('pause'), pauseIcon=$('pauseIcon');
+  var onCard=1, laps=0, timers=[], playing=!reduce, visible=true;
+
+  function clear(){ timers.forEach(clearTimeout); timers=[]; }
+  function later(fn,ms){ timers.push(setTimeout(fn,ms)); }
+  function setCard(i){ cNm.textContent=people[i].name; cTt.textContent=people[i].role; }
+  function show(i,gone){
+    var p=people[i];
+    screen.classList.toggle('gone',!!gone); screen.classList.toggle('newbie',!!p.newbie);
+    sAv.textContent=p.ini; sNm.textContent=p.name; sTt.textContent=gone?'（已離職）':p.role;
+    sSaved.classList.remove('show'); sSv.classList.remove('press');
+  }
+  function rest(){ scene.classList.remove('tap'); phone.classList.remove('tap'); screen.classList.remove('swap'); }
+  // 一次「碰一下」：卡片移向手機 → 漣漪＋畫面切換 → 按下加入通訊錄 → 卡片退回 → 換下一張卡
+  function tap(){
+    var i=onCard, gone=people[i].leaves && laps%2===1;
+    live.textContent='示範：'+people[i].name+'（'+people[i].role+'）的卡碰手機'+(gone?'，顯示已離職頁':'，存入通訊錄');
+    scene.classList.add('tap');
+    later(function(){
+      phone.classList.remove('tap'); void phone.offsetWidth; phone.classList.add('tap');
+      screen.classList.add('swap');
+      later(function(){ show(i,gone); screen.classList.remove('swap'); },380);
+      if(!gone){
+        later(function(){ sSv.classList.add('press'); },1250);
+        later(function(){ sSv.classList.remove('press'); sSaved.classList.add('show'); },1500);
+      }
+    },1000);
+    later(function(){ scene.classList.remove('tap'); phone.classList.remove('tap'); },3300);
+    later(function(){ onCard=(onCard+1)%N; if(onCard===0) laps++; setCard(onCard); },4400);
+  }
+  function tick(){ if(!playing) return; tap(); later(tick,5600); }
+  function resume(){ clear(); rest(); if(playing&&visible&&!document.hidden) later(tick,700); }
+  function setPlaying(v){
+    playing=v;
+    pauseBtn.setAttribute('aria-label',v?'暫停動畫':'播放動畫');
+    pauseIcon.setAttribute('d',v?'M6 5h4v14H6zM14 5h4v14h-4z':'M8 5v14l11-7z');
+    if(v) resume(); else { clear(); rest(); }
+  }
+  pauseBtn.addEventListener('click',function(){ setPlaying(!playing); });
+  show(0,false); sSaved.classList.add('show'); setCard(onCard);
+  if(!reduce){
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(visible) resume(); else clear(); },{threshold:.2}).observe(scene);
+    } else { later(tick,1400); }
+    document.addEventListener('visibilitychange',function(){ if(document.hidden) clear(); else resume(); });
+  }
+
+  // 有滑鼠的裝置：卡片跟著游標 3D 傾斜；觸控裝置：慢慢左右自轉
+  var fine=window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+  if(reduce){ /* 靜止 */ }
+  else if(fine){
+    scene.addEventListener('pointermove',function(e){
+      var r=scene.getBoundingClientRect(), x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+      card.style.setProperty('--ry',(x*24).toFixed(2)+'deg'); card.style.setProperty('--rx',(-y*16).toFixed(2)+'deg'); card.style.setProperty('--sx',(x*90).toFixed(1)+'%');
+    });
+    scene.addEventListener('pointerleave',function(){ ['--ry','--rx','--sx'].forEach(function(k){ card.style.removeProperty(k); }); });
+  } else { card.classList.add('sway'); }
+})();
+</script>
+<script>
+(function(){
+  // ===== 查你的名字：只在瀏覽器比對，名字不會傳出去 =====
+  var input=document.getElementById('nameInput'), btn=document.getElementById('nameBtn'), box=document.getElementById('nameResult');
+  var msg=document.getElementById('nameMsg'), cta=document.getElementById('nameCta'), offline=document.getElementById('nameOffline');
+  if(!input||!btn||!box||!msg||!cta||!offline) return;
+  var BUILTIN=['www','me','cs','mail','api','admin','demo','hyrax','awawa','shop','blog','app','login','static','cdn','ns1','ns2','support','help','info','contact','test','dev','staging']; // 跟 tools/reserved.txt 同步
+  var RE=/^[a-z0-9]([a-z0-9-]{1,22}[a-z0-9])?$/;
+  var FORMAT_MSG='只能用小寫英文、數字和連字號（-），3–24 個字，開頭結尾不能是連字號';
+  var TAKEN_MSG='這個名字已經有人用了，換一個試試';
+  var data=null, loading=null, busy=false;
+
+  function normalize(v){ return v.toLowerCase().replace(/\s+/g,''); }
+  function reset(){ box.classList.remove('show'); msg.hidden=true; msg.textContent=''; msg.className='nc-msg'; cta.hidden=true; offline.hidden=true; offline.textContent=''; }
+  function show(kind,text,name){
+    msg.className='nc-msg '+kind; msg.textContent='';
+    if(name){ var b=document.createElement('b'); b.textContent=name+'.hyrax.tw'; msg.appendChild(b); msg.appendChild(document.createTextNode(' '+text)); }
+    else { msg.textContent=text; }
+    msg.hidden=false; box.classList.add('show');
+  }
+  // 讀 names.json：{"reserved":[...],"taken_sha256":[...]}；失敗就退回內建保留字，只做格式與保留字檢查
+  function load(){
+    if(loading) return loading;
+    loading=fetch('../names.json',{cache:'no-cache'}).then(function(r){
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      return r.json();
+    }).then(function(j){
+      if(!j||!Array.isArray(j.reserved)||!Array.isArray(j.taken_sha256)) throw new Error('bad shape');
+      var taken={}, reserved={};
+      j.taken_sha256.forEach(function(h){ if(typeof h==='string') taken[h.toLowerCase()]=1; });
+      BUILTIN.concat(j.reserved).forEach(function(r){ if(typeof r==='string') reserved[r.toLowerCase()]=1; });
+      data={taken:taken,reserved:reserved};
+    }).catch(function(){ data=null; });
+    return loading;
+  }
+  function isReserved(n){
+    if(n.charAt(0)==='_') return true;
+    if(data) return !!data.reserved[n];
+    return BUILTIN.indexOf(n)!==-1;
+  }
+  function sha256(s){
+    if(!(window.crypto&&crypto.subtle&&window.TextEncoder)) return Promise.reject(new Error('no subtle'));
+    return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(buf){
+      var a=new Uint8Array(buf), out='';
+      for(var i=0;i<a.length;i++) out+=(a[i]<16?'0':'')+a[i].toString(16);
+      return out;
+    });
+  }
+  function check(){
+    if(busy) return;
+    var n=normalize(input.value); input.value=n;
+    reset();
+    if(!n){ input.focus(); return; }
+    if(n.length<3||n.length>24||!RE.test(n)){ show('no',FORMAT_MSG); return; }
+    busy=true; btn.disabled=true; show('wait','查詢中…');
+    load().then(function(){
+      if(isReserved(n)) return 'taken';
+      if(!data) return 'offline';
+      return sha256(n).then(function(h){ return data.taken[h]?'taken':'free'; },function(){ return 'offline'; });
+    }).then(function(r){
+      if(r==='taken'){ show('no',TAKEN_MSG); return; }
+      show('ok','可以用 ✓',n); cta.hidden=false;
+      if(r==='offline'){
+        offline.textContent=(location.protocol==='file:')?'已用名字要上線後才查得到':'暫時查不到已用名字，預約時我會再幫你確認一次';
+        offline.hidden=false;
+      }
+    }).then(function(){ busy=false; btn.disabled=false; },function(){ busy=false; btn.disabled=false; show('no','查詢失敗，請再試一次'); });
+  }
+
+  input.addEventListener('input',function(){
+    var v=input.value, n=normalize(v);
+    if(n!==v){ var pos=(input.selectionStart||v.length)-(v.length-n.length); input.value=n; try{ input.setSelectionRange(pos,pos); }catch(e){} }
+    reset();
+  });
+  input.addEventListener('focus',function(){ load(); });
+  input.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); check(); } });
+  btn.addEventListener('click',check);
+})();
+</script>
+</body>
+</html>

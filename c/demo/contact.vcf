@@ -1,0 +1,10 @@
+BEGIN:VCARD
+VERSION:3.0
+N:蹄兔;小編;;;
+FN:蹄兔小編
+ORG:台灣蹄兔科技（示範）
+TITLE:業務經理
+EMAIL;TYPE=INTERNET,WORK:demo@hyrax.tw
+URL:https://hyrax.tw/c/demo/
+NOTE:這是示範名片，姓名與聯絡資料皆為虛構。
+END:VCARD
